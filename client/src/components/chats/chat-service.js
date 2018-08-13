@@ -42,7 +42,6 @@ export function openChatDetailsForUser(userId, teamID) {
             if ((childData.sentByUserName === sentToUserName || childData.sentToUserName === sentToUserName) &&
                 (childData.sentByUserName === userName || childData.sentToUserName === userName)) {
                 renderMessage(childSnapshot, chatBox);
-                // console.log(childData)
                 if (childSnapshot.val().sentByUserName !== userName) {
                     var msgInfo = {
                         "messageText": childSnapshot.val().messageText,
@@ -77,8 +76,6 @@ export function sendMessage(evt) {
         pushMessagesForChannel(msg);
     } else { // If it's Direct Messages, store message under both the Sender and Receiver nodes
         pushMessagesForUser(msg);
-
-
     }
 
     // push a copy of the message to "Messages" collection on DB
@@ -97,8 +94,6 @@ const store = createStore(chat);
 document.getElementById('addMedia').addEventListener('click', getFile);
 // document.getElementById('enter').addEventListener('click', sendMessage);
 
-// Log the initial state
-// console.log('initial Value',store.getState())
 let sentToUserName = ''; // github username, eg. anilkumar-bv
 let userName = ''; // github username
 let userDisplayName = ''; // github Name
@@ -181,7 +176,6 @@ function pushMessagesForChannel(msg) {
         snapshot.forEach(function(childSnapshot) {
             if (childSnapshot.val().sentToUserName === sentToUserName) {
                 renderMessage(childSnapshot, chatBox);
-
             }
         });
         chatBox.scrollTop = chatBox.scrollHeight;
@@ -210,24 +204,21 @@ function pushMessagesForUser(msg) {
     });
 }
 
-// Render Chat history using subscribe method
-// store.subscribe(() => {
-//     console.log(store.getState());
-// });
-
 function getFile(event) {
     $('#imgupload').trigger('click');
-    event.stopPropagation();
-    $('#imgupload').change(function(e) {
-        e.stopPropagation();
-        var files = e.target.files;
-        var fileName = "/" + files[0].name;
-        filesUpload(files[0], fileName);
-    });
 }
 
+document.getElementById('imgupload').addEventListener('change', uploadFile);
 
-function filesUpload(fileValue, fileName) {
+function uploadFile(e) {
+    var files = e.target.files;
+    if (files[0] ) { //&& count === 1) {
+        var fileName = "/" + files[0].name;
+        filesUpload(files[0], fileName, e);
+    }
+}
+
+function filesUpload(fileValue, fileName, e) {
     var ACCESS_TOKEN = '-svZYpTlHYAAAAAAAAAAlA6ODRtAP91bFD71MYrpc5glK69vAatHDx3602arXz3f';
     $.ajax({
         url: 'https://content.dropboxapi.com/2/files/upload',
@@ -240,6 +231,7 @@ function filesUpload(fileValue, fileName) {
             "Dropbox-API-Arg": `{"path": "${fileName}", "mode": "add", "autorename": true, "mute": false}`
         },
         success: function(data) {
+            e.stopPropagation();
             filesDownload(data.id);
         }
     })
@@ -261,18 +253,12 @@ function filesDownload(fileName) {
                 pushMessagesForChannel(builtMessage);
             } else { // If it's Direct Messages, store message under both the Sender and Receiver nodes
                 pushMessagesForUser(builtMessage);
-                sendDesktopNotification(builtMessage)
             }
         })
         .catch(function(error) {
             console.error(error);
         });
 }
-
-// Render Chat history using subscribe method
-// store.subscribe(() => {
-//     console.log(store.getState());
-// });
 
 // function to Render the individual Message
 function renderMessage(childSnapshot, chatBox) {
