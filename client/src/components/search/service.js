@@ -81,9 +81,9 @@ function getDirectMessages(teamId) {
                             category: "message",
                             label: message,
                             byUser:by,
-                            sentby: byDis,
+                            sentBy: byDis,
                             toUser:to,
-                            sentTo: toDis,
+                            sentTo: to,
                             date:sentOn,
                             direct: true
                         }
@@ -101,6 +101,7 @@ function getChannelMessages(teamId){
     channelMsg.on('value',(channels)=>{
         channels.forEach((channel)=>{
             let messages = channel.child(`messages`);
+            let name=channel.child('channelName').val();
             messages.forEach(message => {
                     let msg = message.val().messageText;
                     let sentOn=message.val().date;
@@ -110,16 +111,14 @@ function getChannelMessages(teamId){
                     if(byDis===null)
                         byDis=by;
 
-                    let to = message.val().sentToUserName;
-                    let toDis=message.val().sentToDisplayName;
-                    if(toDis ===null)
-                        toDis= to;
+                    let to = name;
+                    console.log("to"+to);
 
                     let flag = true;
                     for (let i = 0; i < globallist[2].messages.length; i++) {
                         if (globallist[2].messages[i].label === msg &&
-                            globallist[2].messages[i].sentby === byDis &&
-                            globallist[2].messages[i].sentTo === toDis
+                            globallist[2].messages[i].sentBy === byDis &&
+                            globallist[2].messages[i].sentTo === to
                         )
                             flag = false;
                     }
@@ -128,9 +127,8 @@ function getChannelMessages(teamId){
                             category: "message",
                             label: msg,
                             byUser:by,
-                            sentby: byDis,
-                            toUser:to,
-                            sentTo: toDis,
+                            sentBy: byDis,
+                            sentTo: to,
                             date:sentOn,
                             direct: false
                         }
@@ -221,11 +219,10 @@ export function searchAll(teamId) {
             },
             _renderItem: function (ul, item) {
                 if (item.category === "message") {
-                    return $(`<li class="search-message" id="message-content" data-teamid="${teamId}" data-message="${item.label}" data-sentBy="${item.by}" data-sentTo="${item.to}" data-state="${item.direct}" data-date="${item.date}">`)
+                    return $(`<li class="searchMessage" data-teamid="${teamId}" data-message="${item.label}" data-sentBy="${item.sentBy}" data-sentTo="${item.to}" data-state="${item.direct}" data-date="${item.date}">`)
                         .attr("data-value", item.value)
                         .append(`<i id=sentTo>sentTo:${item.sentTo}</i>`)
-                        .append(`<i id=sentBy>sentBy:${item.sentby}</i>`)
-                        .append(`<i id=sentTime>${moment(item.date).fromNow()}</i><br>`)
+                        .append(`<i id=sentBy>sentBy:${item.sentBy}</i><br>`)
                         .append(item.label)
                         .appendTo(ul);
                 }
@@ -279,41 +276,13 @@ export function searchAll(teamId) {
     });
 }
 
-export function openMsgForUser(sentTo,teamid){
-    let teamId = teamid;
-    let sentToUserName = sentTo;
-    let forChannel = false;
-
-    let receiverRef = firebase.database().ref(`teams/${teamId}/directMessages/users/${sentToUserName}/messages`);
-    receiverRef.on('value', function(snapshot) {
-        let chatBox = document.getElementById('messageBody');
-        chatBox.innerHTML = '';
-        snapshot.forEach(function(childSnapshot) {
-            let childData = childSnapshot.val();
-            if ((childData.sentByUserName === sentToUserName || childData.sentToUserName === sentToUserName) &&
-                (childData.sentByUserName === userName || childData.sentToUserName === userName)) {
-                renderMessage(childSnapshot, chatBox);
-            }
-        });
-        chatBox.scrollIntoView(0,document.body.scrollHeight);
-    });
+export function findMessage(date, sentBy, msg) {
+    let chatBox = document.getElementById('messageBody');
+    chatBox.innerHTML = '';
+    const paraElement = document.createElement('p');
+    const formattedTime = moment(date).fromNow();
+    paraElement.innerHTML = `<strong>${sentBy}</strong> - ${formattedTime}<br>
+                                ${msg}`;
+    chatBox.appendChild(paraElement);
+    chatBox.scrollTo(0, document.body.scrollHeight);
 }
-
-export function openMsgForChannel(sentTo,teamid){
-    let teamId = teamid;
-    let forChannel = true;
-    let sentToUserName = sentTo;
-
-    let receiverRef = firebase.database().ref(`teams/${teamId}/channels/${sentToUserName}/messages`);
-    receiverRef.on('value', snapshot => {
-        let chatBox = document.getElementById('messageBody');
-        chatBox.innerHTML = '';
-        snapshot.forEach(function(childSnapshot) {
-            if (childSnapshot.val().sentToUserName === sentToUserName) {
-                renderMessage(childSnapshot, chatBox);
-            }
-        });
-        chatBox.scrollIntoView(0, document.body.scrollHeight);
-    });
-}
-

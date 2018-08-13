@@ -1,6 +1,5 @@
-import { searchAllChannels, searchAllUsers, getAllChannels, getAllUsers, searchAll, getAllMessages } from './service';
+import { searchAllChannels, searchAllUsers, getAllChannels, getAllUsers, searchAll, getAllMessages,findMessage } from './service';
 import { openChatDetailsForUser, openChatDetailsForChannel } from '../chats/chat-service';
-import { openMsgForChannel, openMsgForUser } from './service';
 
 let globallist = [
     {
@@ -61,20 +60,17 @@ $(document).on("click", '.search-users', function () {
     const userId = $(this).data('username');
     openChatDetailsForUser(userId, teamID);
     $("#searchModal").modal('hide');
-});
+}); 
 
 
-$(document).on("click",'.search-message',function(){
+$(document).on("click",'.searchMessage',function(){
     const teamId=$(this).data('teamid');
     const msg=$(this).data('message');
     const sentTo=$(this).data('sentTo');
     const sentBy=$(this).data('sentBy');
-    const state=$(this).data('state');
+    alert(sentBy)
     const date=$(this).data('date');
-    if(state===true)
-        openMsgForUser(sentTo,teamId);
-    else
-        openMsgForChannel(sentTo,teamId);
+    findMessage(date,sentBy,msg);
     $("#searchModal").modal('hide');
 });
 
