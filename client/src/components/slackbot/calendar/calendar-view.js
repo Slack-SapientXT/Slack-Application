@@ -36,7 +36,7 @@ export const openCalendarView = function () {
 
 export const newCalendarlistItemView = function (calendarDataItem) {
   return `<li class="list-group-item p-2 bg-light">
-  ${calendarDataItem.commandEntered}
+  ${calendarDataItem.commandEntered} [Created at ${calendarDataItem.creatTime}]
   
 </li>`;
 };

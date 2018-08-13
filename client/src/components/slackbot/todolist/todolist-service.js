@@ -88,6 +88,12 @@ export const getTodolistForUserService = userId => new Promise((resolve, reject)
 
 // function to mark completed or uncompleted or delete the task from todolist -- firebase
 export const markOrUnmarkOrDelete = ( (action, taskId, userId)  => {
+  const newTimeForUpdate = new Date();
+  const creatTime = `${
+    newTimeForUpdate.getHours()}:${
+    newTimeForUpdate.getMinutes()}:${
+    newTimeForUpdate.getSeconds()}`;
+
   if(action === 'checked'){
     action = 'unchecked';
   }else if(action === 'unchecked'){
@@ -98,7 +104,8 @@ export const markOrUnmarkOrDelete = ( (action, taskId, userId)  => {
   } else if (action === 'checked' || action === 'unchecked') {
     var rawData=database.ref().child(`SlackXT/slackbot/${userId}/todolist/${taskId}`);
     return rawData.update({
-      taskCompleted: action
+      taskCompleted: action,
+      creatTime: creatTime
     });
   }
 });

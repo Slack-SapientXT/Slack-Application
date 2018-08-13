@@ -3,11 +3,20 @@ import { GITHUB_API_TOKEN, GITHUB_API_CREATE_REPO_URL, GITHUB_API_USER_URL } fro
 
 // function to retrieve github token from firebase database -- firebase
 export const getGithubToken = () => new Promise((resolve, reject) => {
-  database.ref(`SlackXT/gitToken`).once('value')
+  const user = JSON.parse(window.localStorage.getItem("current_user"));
+  const userId = user.user.userName;
+  var userToken = '';
+  database.ref(`users`).once('value')
   .then((snapshot) => {
-    const githubToken = snapshot.val();
-    if (githubToken !== '') {
-      resolve(githubToken);
+    let allUser = snapshot.val();
+    const allUserArray = Object.keys(allUser).map(i => allUser[i])
+    for(var j=0; j<=allUserArray.length - 1; j++){
+      if(allUserArray[j].username === userId){
+        userToken = allUserArray[j].accessToken;
+      }
+    }
+    if (userToken !== '') {
+      resolve(userToken);
     } else {
       reject(new Error(`Error while retrieving github token from firebase database.`));
       console.log('Error while retrieving github token from firebase database...');
@@ -44,7 +53,7 @@ export const createRepoGithubService = repositoryName => new Promise((resolve, r
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `token ${githubToken}`,
+        Authorization: `Bearer ${githubToken}`,
       },
       body: JSON.stringify({
         name: repositoryName,
@@ -63,8 +72,10 @@ export const createRepoGithubService = repositoryName => new Promise((resolve, r
 // function to create issue into github account for a repo. -- github
 export const createIssueGithubService = (repositoryName,
   issueName) => new Promise((resolve, reject) => {
+    const user = JSON.parse(window.localStorage.getItem("current_user"));
+    const githubUserId = user.user.userName;
   getGithubToken().then((githubToken) => {
-    fetch(`${GITHUB_API_USER_URL + repositoryName}/issues`, {
+    fetch(`${GITHUB_API_USER_URL + githubUserId + '/' + repositoryName}/issues`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
