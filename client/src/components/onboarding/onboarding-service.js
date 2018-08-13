@@ -58,7 +58,7 @@ export async function saveUpdateUserAfterLogin(userUID, response)
   // START: REDUX //
   const obj =  {
     "user": {
-      "accessToken": userDat.accessToken,
+      "accessToken": userData.accessToken,
       "userName": userData.username,
       "currentTeam": {
         "teamName": "",
