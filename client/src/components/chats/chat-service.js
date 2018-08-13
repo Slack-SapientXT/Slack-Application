@@ -211,6 +211,7 @@ function getFile(event) {
 document.getElementById('imgupload').addEventListener('change', uploadFile);
 
 function uploadFile(e) {
+    e.stopPropagation();
     var files = e.target.files;
     if (files[0] ) { //&& count === 1) {
         var fileName = "/" + files[0].name;
