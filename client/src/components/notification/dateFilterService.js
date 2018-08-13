@@ -135,7 +135,7 @@ function dateConverter(recorddate, startDate, endDate){
    if((pasrdCheck <= pasrdendDate && pasrdCheck >= pasrdstartDate)) 
    {  
      let firebaseTimestamp =  datevalues[1]+"/"+datevalues[2]+"/"+datevalues[0]+ " "+datevalues[3]+":"+datevalues[4]+":"+datevalues[5];
-    formatDate= moment( firebaseTimestamp, 'MM/DD/YYYY HH:mm:ss').format("MM/DD/YYYY H:mm:ss a");    
+    formatDate= moment( firebaseTimestamp, 'MM/DD/YYYY HH:mm:ss').format("MM/DD/YYYY h:mm:ss a");    
      }
      return formatDate;
     }  
