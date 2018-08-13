@@ -54,9 +54,11 @@ export async function saveUpdateUserAfterLogin(userUID, response)
     };
   }
 
+  console.log("_____________________________"+userData);
   // START: REDUX //
   const obj =  {
     "user": {
+      "accessToken": userDat.accessToken,
       "userName": userData.username,
       "currentTeam": {
         "teamName": "",
