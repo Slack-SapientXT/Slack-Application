@@ -60,7 +60,7 @@ $(document).on("click", '.search-users', function () {
     const userId = $(this).data('username');
     openChatDetailsForUser(userId, teamID);
     $("#searchModal").modal('hide');
-});
+}); 
 
 
 $(document).on("click",'.searchMessage',function(){
