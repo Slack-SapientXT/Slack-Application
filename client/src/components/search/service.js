@@ -140,9 +140,10 @@ function getChannelMessages(teamId){
     })
 }
 
+
 export function getAllMessages(teamId) {
     getDirectMessages(teamId);
-    getChannelMessages(teamId);
+    // getChannelMessages(teamId);
 }
 
 export function searchAllChannels(teamId) {
