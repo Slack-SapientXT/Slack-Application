@@ -42,8 +42,7 @@ export function openChatDetailsForUser(userId, teamID) {
             if ((childData.sentByUserName === sentToUserName || childData.sentToUserName === sentToUserName) &&
                 (childData.sentByUserName === userName || childData.sentToUserName === userName)) {
                 renderMessage(childSnapshot, chatBox);
-                console.log(childData)
-
+                // console.log(childData)
                 if (childSnapshot.val().sentByUserName !== userName) {
                     var msgInfo = {
                         "messageText": childSnapshot.val().messageText,
@@ -157,7 +156,6 @@ function buildMessageEntity(message) {
     msg.sentToUserName = sentToUserName;
     msg.sentByUserName = userName;
     msg.sentByDisplayName = userDisplayName;
-    msg.notified = false;
 
     // If the user does not have "name" (Display Name) attribute in the User Entity, assign "userName" to DisplayName
     if (userDisplayName)
