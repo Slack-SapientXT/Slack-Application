@@ -54,14 +54,9 @@ export async function saveUpdateUserAfterLogin(userUID, response)
     };
   }
 
-  // Updating access token
-  userData.accessToken = response.credential.accessToken;
-  console.log(userData);
-
   // START: REDUX //
   const obj =  {
     "user": {
-      "accessToken": response.credential.accessToken,
       "userName": userData.username,
       "currentTeam": {
         "teamName": "",
@@ -69,6 +64,15 @@ export async function saveUpdateUserAfterLogin(userUID, response)
       },
       "teams": []
   }};
+
+  // Updating access token
+  if(response !== null && response !== undefined && response.credential !== undefined)
+  {
+    userData.accessToken = response.credential.accessToken;
+    obj.user.accessToken = response.credential.accessToken;
+  }
+  console.log(userData);
+  
   store.dispatch({type: "LOGIN", obj});
   // END: REDUX //
 
