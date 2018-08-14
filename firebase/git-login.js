@@ -2,6 +2,7 @@ import './firebase-config';
 import firebase from 'firebase';
 
 const provider = new firebase.auth.GithubAuthProvider();
+provider.addScope('repo');
 
 export function gitLogin() {
   return new Promise((resolve, reject) => {

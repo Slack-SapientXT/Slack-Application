@@ -7,6 +7,7 @@ import { createOtherbot } from './otherbot/otherbot-controller';
 import { openReminder } from './reminder/reminder-controller';
 import { openCalendar } from './calendar/calendar-controller';
 import { botDonotHaveAnswer } from './todolist/todolist-view';
+import { openHelp } from './help/help-controller';
 
 export const hitEnter = function (e) {
   // calling recast api
@@ -21,7 +22,7 @@ export const hitEnter = function (e) {
         currentdateTime.getMinutes()}:${
         currentdateTime.getSeconds()}`;
       if(recastResponse.intents.length > 0){
-        if (recastResponse.intents[0].slug === 'create-git-repo') {
+        if (recastResponse.intents[0].slug === 'create-git-repo') { 
           const widgetData = {
             id: '',
             commandEntered: e,
@@ -37,7 +38,7 @@ export const hitEnter = function (e) {
           // save createRepository widget state to database code --> calling gitbot-controller
           createRepository(widgetData);
         }
-        if (recastResponse.intents[0].slug === 'create-git-issue') {
+        else if (recastResponse.intents[0].slug === 'create-git-issue') {
           const widgetData = {
             id: '',
             commandEntered: e,
@@ -53,12 +54,12 @@ export const hitEnter = function (e) {
           // save createIssue widget state to database code --> calling gitbot-controller
           createRepositoryIssue(widgetData);
         }
-        if (recastResponse.intents[0].slug === 'reminder') {
+        else if (recastResponse.intents[0].slug === 'reminder') {
           const widgetData = {
             id: '',
             commandEntered: e,
             widgetName: recastResponse.intents[0].slug,
-            reminderTime: recastResponse.entities.time[0].value,
+            reminderTime: recastResponse.entities.time[0].raw,
             reminderDate: recastResponse.entities.date[0].value,
             remindeeUser: recastResponse.entities.user[0].raw,
             userId: user.user.userName,
@@ -71,7 +72,7 @@ export const hitEnter = function (e) {
           // save reminder widget state to database code --> calling todolist-controller
           createReminder(widgetData);
         }
-        if (recastResponse.intents[0].slug === 'todolist') {
+        else if (recastResponse.intents[0].slug === 'todolist') {
           const widgetData = {
             id: '',
             commandEntered: e,
@@ -87,7 +88,7 @@ export const hitEnter = function (e) {
           // save to-do-list widget state to database code --> calling todolist-controller
           createTodolistTask(widgetData);
         }
-        if (recastResponse.intents[0].slug === 'calendar-schedule') {
+        else if (recastResponse.intents[0].slug === 'calendar-schedule') {
           const widgetData = {
             id: '',
             commandEntered: e,
@@ -102,7 +103,7 @@ export const hitEnter = function (e) {
           // save calendar-schedule widget state to database code --> calling calendar-controller
           createCalendarEvent(widgetData);
         }
-        if (recastResponse.intents[0].slug === 'otherbot') {
+        else if (recastResponse.intents[0].slug === 'otherbot') {
           const widgetData = {
             id: '',
             commandEntered: e,
@@ -118,7 +119,7 @@ export const hitEnter = function (e) {
           // save calendar-schedule widget state to database code --> calling calendar-controller
           createOtherbot(widgetData);
         }
-        if (recastResponse.intents[0].slug === 'open-todolist') {
+        else if (recastResponse.intents[0].slug === 'open-todolist') {
           const openWidgetType = {
             commandEntered: e,
             widgetName: recastResponse.intents[0].slug,
@@ -127,7 +128,7 @@ export const hitEnter = function (e) {
           // open todolist modal --> calling todolist-controller
           openTodolist(openWidgetType);
         }
-        if (recastResponse.intents[0].slug === 'open-reminder') {
+        else if (recastResponse.intents[0].slug === 'open-reminder') {
           const openWidgetType = {
             commandEntered: e,
             widgetName: recastResponse.intents[0].slug,
@@ -136,7 +137,7 @@ export const hitEnter = function (e) {
           // open reminder modal --> calling reminder-controller
           openReminder(openWidgetType);
         }
-        if (recastResponse.intents[0].slug === 'open-calendar') {
+        else if (recastResponse.intents[0].slug === 'open-calendar') {
           const openWidgetType = {
             commandEntered: e,
             widgetName: recastResponse.intents[0].slug,
@@ -144,6 +145,10 @@ export const hitEnter = function (e) {
           };
           // open calendar modal --> calling reminder-controller
           openCalendar(openWidgetType);
+        }
+        else if (recastResponse.intents[0].slug === 'slackbothelp') {
+          // open help modal
+          openHelp();
         }
         // if non of the conditions matched
         else {

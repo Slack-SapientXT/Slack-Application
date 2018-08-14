@@ -79,7 +79,7 @@ export const sendReminderMeaageOnTime = function () {
   getReminderForAllUsersService().then( (reminderMsgListObject) => {
     const reminderMsgListArray = Object.keys(reminderMsgListObject).map(i => reminderMsgListObject[i])
     for(var k = 0; k <= reminderMsgListArray.length - 1; k++){//loop for each users
-      var reminderMsgListArrayObj =reminderMsgListArray[k].reminder;
+      var reminderMsgListArrayObj =reminderMsgListArray[k].reminder1;
         if (typeof(reminderMsgListArrayObj) !== 'undefined'){
         const allReminderMsgListArray = Object.keys(reminderMsgListArrayObj).map(i => reminderMsgListArrayObj[i]);
         for(var j = 0; j <= allReminderMsgListArray.length - 1; j++){ // loop for each reminder for a user

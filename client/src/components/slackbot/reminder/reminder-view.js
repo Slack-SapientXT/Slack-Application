@@ -37,7 +37,7 @@ export const openReminderView = function () {
 
 export const newReminderlistItemView = function (reminderDataItem) {
   return `<li class="list-group-item p-2 bg-light">
-  ${reminderDataItem.commandEntered}
+  ${reminderDataItem.commandEntered} [Created at ${reminderDataItem.creatTime}]
   
 </li>`;
 };

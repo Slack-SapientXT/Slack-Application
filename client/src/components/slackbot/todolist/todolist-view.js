@@ -42,7 +42,7 @@ export const newTodolistItemView = function (todolistDataItem, userId) {
       iconClass = "fa-square-o text-secondary"
   }
   return `<li class="list-group-item p-2 bg-light" id= "123g">
-  ${todolistDataItem.task}
+  ${todolistDataItem.task} [Create/Completed at ${todolistDataItem.creatTime}]
   <i class="float-right pl-2 fa fa-remove text-danger todoListItemsAction" 
   data-action="remove" data-value='${todolistDataItem.id}' data-userid='${userId}'></i>
   <i class="float-right fa ${iconClass} todoListItemsAction" 
