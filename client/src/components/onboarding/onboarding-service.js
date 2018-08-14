@@ -1,6 +1,11 @@
 import { getCurrentUserDetails, saveUpdateUser, getTeamDetail, saveUpdateTeam } from '../../../../firebase/onboarding-db';
 import { store } from './profileReducer';
 
+function replaceLast(x, y, z){
+  var a = x.split("");
+  a[x.lastIndexOf(y)] = z;
+  return a.join("");
+}
 export default function createHTMLElement(htmlString) {
   const template = document.createElement('template');
   template.innerHTML = htmlString;
@@ -8,7 +13,9 @@ export default function createHTMLElement(htmlString) {
 }
 
 const getUrlParameter = function getUrlParameter(sParam) {
-  const sPageURL = decodeURIComponent(window.location.search.substring(1));
+  let sPageURL = decodeURIComponent(window.location.search.substring(1));
+       // if(sPageURL.contains("#"))
+        sPageURL=replaceLast(sPageURL, "#", "");
   const sURLVariables = sPageURL.split('&');
   let sParameterName;
   let i;
