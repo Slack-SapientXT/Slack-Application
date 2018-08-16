@@ -27,7 +27,7 @@ function fnCreateChannel() {
     }
   });
 }
-document.getElementById('createChannel1').addEventListener('click', fnCreateChannel);
+// document.getElementById('createChannel1').addEventListener('click', fnCreateChannel);
 
 function getAllUsersFromTeam(teamID) {
   const checkUserRef = database.ref('teams/' + teamID);

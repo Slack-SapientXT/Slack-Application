@@ -54,7 +54,7 @@ function getAllUsers(teamName) {
   let getAllContactHtml = `<ul class="side-list"><li data-toggle="modal" data-teamid="${teamName}" data-target="#searchModal" id="searchPeople">Direct Messages
     </li></ul><ul class="side-list side-list-body" id="usersList"></ul>`;
   $('#showContactInformation').append(getAllContactHtml);
-  checkUserRef.on('value', (snapshot) => {
+  checkUserRef.once('value', (snapshot) => {
     const checkUserRef = snapshot.val();
     if (checkUserRef['users']) {
       database.ref('teams/' + teamName + '/users').once('value', dataSnapshot => {
@@ -155,12 +155,44 @@ function deleteUsers(userNode, teamID) {
 
 
 jQuery(document).on('click', '.removeUser', function (e) {
+  // confirmPopup();
   e.preventDefault;
   const userNode = $(this).parents('span').data('usernode');
   const teamID = $(this).parents('span').data('teamid');
   deleteUsers(userNode, teamID);
   $(this).parents('li').remove();
 });
+
+// function confirmPopup(){
+//   let html1 = `
+//   // <!-- Button trigger modal -->
+// <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+//   Launch demo modal
+// </button>
+
+// // <!-- Modal -->
+// <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+//   <div class="modal-dialog" role="document">
+//     <div class="modal-content">
+//       <div class="modal-header">
+//         <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+//         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+//           <span aria-hidden="true">&times;</span>
+//         </button>
+//       </div>
+//       <div class="modal-body">
+//         ...
+//       </div>
+//       <div class="modal-footer">
+//         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+//         <button type="button" class="btn btn-primary">Save changes</button>
+//       </div>
+//     </div>
+//   </div>
+// </div>
+// `
+// $(`.removeUser`).html(html1);
+// }
 
 function muteChannel(teamID,channelId,channelName) {
   const newPostKey = database.ref(`teams/`+teamID+`/prefrences/mute/channels/`+ channelId).update({
@@ -203,7 +235,6 @@ $(document).on('click', '.removeChannel', function (e) {
   e.preventDefault;
   const channelID = $(this).parents('span').data('channelid');
   const teamID = $(this).parents('span').data('teamid');
-  // console.log(channelId);
   removeChannel(channelID, teamID);
   $(this).parents('li').remove();
 });
