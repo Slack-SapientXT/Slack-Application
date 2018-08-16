@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "slackcollaboration-fa323"
+    "default": "slackcollaboration-fa323",
+    "firebase-setup": "fir-setup-81b8d"
   }
 }
